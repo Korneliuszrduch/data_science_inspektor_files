@@ -20,9 +20,10 @@ ALL_FILES_AFTER_ANALISIS_PATH = FILES_FOR_ANALISIS_PATH / "all_files_after_anali
 FILES_REJECTED_PATH = FILES_FOR_ANALISIS_PATH / "applications_rejected"
 FILES_ACCEPT_PATH = FILES_FOR_ANALISIS_PATH / "applications_accept"
 pdf_path = FILES_FOR_ANALISIS_PATH / "wzor_fiszki_wypełniona.pdf"
-#output_path = FILES_FOR_ANALISIS_PATH / "wzor_fiszki_wypełniona.png"
-output_path = FILES_FOR_ANALISIS_PATH / "wzor_fiszki_wypełniona1.png"
+output_path = FILES_FOR_ANALISIS_PATH / "wzor_fiszki_wypełniona.png"
+# output_path = FILES_FOR_ANALISIS_PATH / "wzor_fiszki_wypełniona1.png"
 #output_path = FILES_FOR_ANALISIS_PATH / "fiszka.png"
+#output_path = FILES_FOR_ANALISIS_PATH / "fiszka_justyna.png"
 
 # Tworzenie katalogów, jeśli nie istnieją
 for path in [FILES_FOR_ANALISIS_PATH, FILES_ACCEPT_PATH, FILES_REJECTED_PATH, ALL_FILES_AFTER_ANALISIS_PATH]:
@@ -110,19 +111,22 @@ if st.button("Weryfikuj nowe pliki"):
 
 
 class ImageInfo(BaseModel):
+
     First_Name: str
     Surname: str
-    Sex: str
     Email: str
+    Sex: str
+    Punkt_8: bool
     Punkt_9: bool
     Punkt_10: bool
-    Punkt_11: bool
+    Punkt_14: bool
+    Punkt_15: bool
+
 
 
 
 openai_client = get_openai_client()
 instructor_openai_client = instructor.from_openai(openai_client)
-  
 
 
 if st.button("Przeanalizuj plik") and 'instructor_openai_client' in locals():
@@ -131,6 +135,7 @@ if st.button("Przeanalizuj plik") and 'instructor_openai_client' in locals():
        
        
             try:
+                
                 gas_bill = instructor_openai_client.chat.completions.create(
                     model="gpt-4o",
                     response_model=ImageInfo,
@@ -140,7 +145,7 @@ if st.button("Przeanalizuj plik") and 'instructor_openai_client' in locals():
                             "content": [
                                 {
                                     "type": "text",
-                                    "text": "Pobierz dane",
+                                    "text": "Proszę wyodrębnić imię, nazwisko, email, płeć oraz określić czy w punktach 8, 9, 10, 14 i 15 zaznaczono TAK czy NIE.",
                                 },
                                 {
                                     "type": "image_url",
@@ -153,9 +158,9 @@ if st.button("Przeanalizuj plik") and 'instructor_openai_client' in locals():
                         },
                     ],
                 )
-
-                st.write(gas_bill)
                 st.write(output_path)
+                st.write(gas_bill)
+           
             except Exception as e:
                 st.error(f"Błąd podczas uzyskiwania odpowiedzi z OpenAI: {e}")
     else:
