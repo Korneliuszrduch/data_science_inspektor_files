@@ -1,0 +1,19 @@
+name: inspector-files
+channels:
+    - conda-forge
+    - defaults
+dependencies:
+    - python=3.11
+    - jupyterlab
+    - streamlit
+    - openai
+    - anthropic
+    - python-dotenv
+    - poppler
+    - xlsxwriter
+    - pip
+    - pip:
+          - langfuse
+          - instructor
+          - pydantic
+          - pdf2image

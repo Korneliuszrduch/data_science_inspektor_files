@@ -3,6 +3,7 @@
 .vscode/
 .idea/
 .history/
+data/processed
 
 # cache
 __pycache__/
